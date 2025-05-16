@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Check, X, Edit, Trash2, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from '@/hooks/use-toast';
 
 // Mock data for inventory
 const inventoryData = [
@@ -83,7 +84,7 @@ const inventoryData = [
 
 const Inventory = () => {
   const [searchQuery, setSearchQuery] = useState('');
-
+  
   const filteredInventory = inventoryData.filter(item => 
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -107,6 +108,27 @@ const Inventory = () => {
       currency: 'USD',
     }).format(price);
   };
+  
+  const handleAddVehicle = () => {
+    toast({
+      title: "Add Vehicle",
+      description: "Vehicle add form would open here.",
+    });
+  };
+  
+  const handleEdit = (id: number) => {
+    toast({
+      title: "Edit Vehicle",
+      description: `Editing vehicle #${id}`,
+    });
+  };
+  
+  const handleDelete = (id: number) => {
+    toast({
+      title: "Delete Vehicle",
+      description: `Vehicle #${id} would be deleted after confirmation.`,
+    });
+  };
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -124,7 +146,7 @@ const Inventory = () => {
                 className="w-64"
               />
             </div>
-            <Button className="flex items-center gap-1">
+            <Button className="flex items-center gap-1" onClick={handleAddVehicle}>
               <Plus size={16} />
               <span>Add Vehicle</span>
             </Button>
@@ -161,10 +183,10 @@ const Inventory = () => {
                   <TableCell>{getStatusBadge(item.status)}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" onClick={() => handleEdit(item.id)}>
                         <Edit size={16} />
                       </Button>
-                      <Button variant="ghost" size="sm" className="text-red-500">
+                      <Button variant="ghost" size="sm" className="text-red-500" onClick={() => handleDelete(item.id)}>
                         <Trash2 size={16} />
                       </Button>
                     </div>

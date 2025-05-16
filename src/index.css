@@ -62,7 +62,7 @@
     --secondary-foreground: 213 31% 91%;
 
     --muted: 223 47% 12%;
-    --muted-foreground: 215 20% 65%;
+    --muted-foreground: 215 20% 75%;  /* Increased brightness for better contrast */
 
     --accent: 222 47% 14%;
     --accent-foreground: 213 31% 91%;

@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Eye, FileDown } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 // Mock data for orders
 const orderData = [
@@ -115,6 +116,20 @@ const Orders = () => {
       currency: 'USD',
     }).format(price);
   };
+  
+  const handleExport = () => {
+    toast({
+      title: "Exporting Orders",
+      description: "Your orders data would be exported as CSV.",
+    });
+  };
+  
+  const handleViewOrder = (orderId: string) => {
+    toast({
+      title: "View Order Details",
+      description: `Viewing details for order ${orderId}`,
+    });
+  };
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -123,7 +138,7 @@ const Orders = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold">Orders Management</h2>
           <div className="flex gap-3">
-            <Button variant="outline" className="flex gap-2 items-center">
+            <Button variant="outline" className="flex gap-2 items-center" onClick={handleExport}>
               <FileDown size={16} />
               <span>Export</span>
             </Button>
@@ -178,7 +193,12 @@ const Orders = () => {
                   <TableCell>{formatPrice(order.total)}</TableCell>
                   <TableCell>{getStatusBadge(order.status)}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-8 w-8 p-0"
+                      onClick={() => handleViewOrder(order.id)}
+                    >
                       <Eye size={16} />
                     </Button>
                   </TableCell>

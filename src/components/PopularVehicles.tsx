@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 const vehicles = [
   {
@@ -38,6 +39,14 @@ const PopularVehicles = () => {
     navigate('/inventory');
   };
   
+  const handleVehicleClick = (id: number) => {
+    // In a real app, this would navigate to the vehicle detail page
+    toast({
+      title: "Vehicle Selected",
+      description: `You selected vehicle #${id}. Detailed view coming soon.`,
+    });
+  };
+  
   return (
     <div className="dashboard-card">
       <div className="flex items-center justify-between mb-4">
@@ -53,7 +62,11 @@ const PopularVehicles = () => {
       
       <div className="space-y-4">
         {vehicles.map((vehicle) => (
-          <div key={vehicle.id} className="flex items-center p-3 rounded-lg border border-border hover:bg-accent/30 transition-colors">
+          <div 
+            key={vehicle.id} 
+            className="flex items-center p-3 rounded-lg border border-border hover:bg-accent/30 transition-colors cursor-pointer"
+            onClick={() => handleVehicleClick(vehicle.id)}
+          >
             <div className="w-12 h-12 rounded-md bg-accent flex items-center justify-center mr-4">
               <span className="text-accent-foreground font-medium">{vehicle.name.substring(0, 2)}</span>
             </div>

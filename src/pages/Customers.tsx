@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Eye, Plus, Mail, Phone } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 // Mock data for customers
 const customerData = [
@@ -131,6 +132,20 @@ const Customers = () => {
       .join('')
       .toUpperCase();
   };
+  
+  const handleAddCustomer = () => {
+    toast({
+      title: "Add Customer",
+      description: "Customer add form would open here.",
+    });
+  };
+  
+  const handleViewCustomer = (id: number) => {
+    toast({
+      title: "View Customer Details",
+      description: `Viewing details for customer #${id}`,
+    });
+  };
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -139,7 +154,7 @@ const Customers = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold">Customer Management</h2>
           <div className="flex gap-3">
-            <Button className="flex items-center gap-1">
+            <Button className="flex items-center gap-1" onClick={handleAddCustomer}>
               <Plus size={16} />
               <span>Add Customer</span>
             </Button>
@@ -197,7 +212,12 @@ const Customers = () => {
                   <TableCell>{formatDate(customer.lastPurchase)}</TableCell>
                   <TableCell>{getStatusBadge(customer.status)}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-8 w-8 p-0"
+                      onClick={() => handleViewCustomer(customer.id)}
+                    >
                       <Eye size={16} />
                     </Button>
                   </TableCell>
