@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const orders = [
   {
@@ -38,38 +40,48 @@ const orders = [
 ];
 
 const RecentOrders = () => {
+  const navigate = useNavigate();
+
+  const handleViewAll = () => {
+    navigate('/orders');
+  };
+
   return (
     <div className="dashboard-card">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-navy-800">Recent Orders</h2>
-        <button className="text-sm text-primary flex items-center">
+        <h2 className="text-lg font-semibold">Recent Orders</h2>
+        <Button 
+          variant="ghost" 
+          onClick={handleViewAll} 
+          className="text-sm text-primary flex items-center"
+        >
           View All <ChevronRight size={16} />
-        </button>
+        </Button>
       </div>
       
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-border">
           <thead>
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-navy-500 uppercase tracking-wider">Order ID</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-navy-500 uppercase tracking-wider">Customer</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-navy-500 uppercase tracking-wider">Vehicle</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-navy-500 uppercase tracking-wider">Amount</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-navy-500 uppercase tracking-wider">Status</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Order ID</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Customer</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Vehicle</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Amount</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-100">
+          <tbody className="divide-y divide-border">
             {orders.map((order) => (
-              <tr key={order.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 text-sm font-medium text-navy-800">{order.id}</td>
-                <td className="px-4 py-3 text-sm text-navy-600">{order.customer}</td>
-                <td className="px-4 py-3 text-sm text-navy-600">{order.car}</td>
-                <td className="px-4 py-3 text-sm font-medium text-navy-800">{order.amount}</td>
+              <tr key={order.id} className="hover:bg-muted/30">
+                <td className="px-4 py-3 text-sm font-medium">{order.id}</td>
+                <td className="px-4 py-3 text-sm">{order.customer}</td>
+                <td className="px-4 py-3 text-sm">{order.car}</td>
+                <td className="px-4 py-3 text-sm font-medium">{order.amount}</td>
                 <td className="px-4 py-3 text-sm">
                   <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
                     order.status === 'Completed' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-yellow-100 text-yellow-800'
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
+                      : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
                   }`}>
                     {order.status}
                   </span>

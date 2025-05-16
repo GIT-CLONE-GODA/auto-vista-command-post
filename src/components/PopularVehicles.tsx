@@ -1,5 +1,8 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ChevronRight } from 'lucide-react';
 
 const vehicles = [
   {
@@ -29,28 +32,43 @@ const vehicles = [
 ];
 
 const PopularVehicles = () => {
+  const navigate = useNavigate();
+  
+  const handleViewAll = () => {
+    navigate('/inventory');
+  };
+  
   return (
     <div className="dashboard-card">
-      <h2 className="text-lg font-semibold text-navy-800 mb-4">Popular Vehicles</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold">Popular Vehicles</h2>
+        <Button 
+          variant="ghost"
+          onClick={handleViewAll}
+          className="text-sm text-primary flex items-center"
+        >
+          View All <ChevronRight size={16} />
+        </Button>
+      </div>
       
       <div className="space-y-4">
         {vehicles.map((vehicle) => (
-          <div key={vehicle.id} className="flex items-center p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors">
-            <div className="w-12 h-12 rounded-md bg-navy-100 flex items-center justify-center mr-4">
-              <span className="text-navy-600 font-medium">{vehicle.name.substring(0, 2)}</span>
+          <div key={vehicle.id} className="flex items-center p-3 rounded-lg border border-border hover:bg-accent/30 transition-colors">
+            <div className="w-12 h-12 rounded-md bg-accent flex items-center justify-center mr-4">
+              <span className="text-accent-foreground font-medium">{vehicle.name.substring(0, 2)}</span>
             </div>
             <div className="flex-1">
-              <h3 className="text-sm font-medium text-navy-800">{vehicle.name}</h3>
-              <p className="text-xs text-navy-500">{vehicle.type}</p>
+              <h3 className="text-sm font-medium">{vehicle.name}</h3>
+              <p className="text-xs text-muted-foreground">{vehicle.type}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm font-medium text-navy-800">{vehicle.price}</p>
+              <p className="text-sm font-medium">{vehicle.price}</p>
               <div className="flex items-center justify-end mt-1">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <svg 
                       key={i} 
-                      className={`w-3 h-3 ${i < Math.floor(vehicle.rating) ? 'text-yellow-400' : 'text-gray-300'}`} 
+                      className={`w-3 h-3 ${i < Math.floor(vehicle.rating) ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}`} 
                       fill="currentColor" 
                       viewBox="0 0 20 20"
                     >
@@ -58,7 +76,7 @@ const PopularVehicles = () => {
                     </svg>
                   ))}
                 </div>
-                <span className="text-xs text-navy-500 ml-1">{vehicle.rating}</span>
+                <span className="text-xs text-muted-foreground ml-1">{vehicle.rating}</span>
               </div>
             </div>
           </div>
