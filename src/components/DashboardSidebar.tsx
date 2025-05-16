@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Car, 
@@ -9,12 +9,12 @@ import {
   Settings, 
   ChevronRight, 
   ChevronLeft,
-  Bell,
-  Search 
 } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 const DashboardSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
 
   const navItems = [
     { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/' },
@@ -45,38 +45,53 @@ const DashboardSidebar = () => {
       
       <nav className="flex-1 py-4">
         <ul className="space-y-1 px-2">
-          {navItems.map((item) => (
-            <li key={item.name}>
-              <Link
-                to={item.path}
-                className="flex items-center gap-3 text-sidebar-foreground hover:bg-sidebar-accent rounded-md px-3 py-2 transition-colors"
-              >
-                <span>{item.icon}</span>
-                {!collapsed && <span>{item.name}</span>}
-              </Link>
-            </li>
-          ))}
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path || 
+              (item.path !== '/' && location.pathname.startsWith(item.path));
+            
+            return (
+              <li key={item.name}>
+                <Link
+                  to={item.path}
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 transition-colors ${
+                    isActive 
+                      ? 'bg-sidebar-primary text-white'
+                      : 'text-sidebar-foreground hover:bg-sidebar-accent'
+                  }`}
+                >
+                  <span>{item.icon}</span>
+                  {!collapsed && <span>{item.name}</span>}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
       
       <div className="p-4 border-t border-sidebar-border">
-        {!collapsed ? (
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center">
-              <span className="text-white font-semibold">A</span>
+        <div className="flex items-center justify-between">
+          {!collapsed ? (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center">
+                  <span className="text-white font-semibold">A</span>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-sidebar-foreground font-medium">Admin User</p>
+                  <p className="text-xs text-sidebar-foreground/70">admin@autostore.com</p>
+                </div>
+              </div>
+              <ThemeToggle />
+            </>
+          ) : (
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center">
+                <span className="text-white font-semibold">A</span>
+              </div>
+              <ThemeToggle />
             </div>
-            <div className="flex-1">
-              <p className="text-sm text-sidebar-foreground font-medium">Admin User</p>
-              <p className="text-xs text-sidebar-foreground/70">admin@autostore.com</p>
-            </div>
-          </div>
-        ) : (
-          <div className="flex justify-center">
-            <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center">
-              <span className="text-white font-semibold">A</span>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
