@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DashboardHeader from '../components/DashboardHeader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,8 +8,84 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { useTheme } from '@/context/ThemeContext';
+import { toast } from '@/hooks/use-toast';
 
 const Settings = () => {
+  const { theme, toggleTheme } = useTheme();
+  
+  // Form state
+  const [storeInfo, setStoreInfo] = useState({
+    name: "Auto Excellence",
+    email: "contact@autoexcellence.com",
+    phone: "(555) 123-4567",
+    address: "123 Auto Boulevard, Car City, CC 12345"
+  });
+  
+  const [regionalSettings, setRegionalSettings] = useState({
+    timezone: "America/New_York",
+    currency: "USD",
+    dateFormat: "MM/DD/YYYY"
+  });
+  
+  // Handle form changes
+  const handleStoreInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStoreInfo({
+      ...storeInfo,
+      [e.target.id]: e.target.value
+    });
+  };
+  
+  const handleRegionalSettingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRegionalSettings({
+      ...regionalSettings,
+      [e.target.id]: e.target.value
+    });
+  };
+  
+  // Handle form submissions
+  const handleSaveStoreInfo = () => {
+    toast({
+      title: "Store information saved",
+      description: "Your store information has been updated successfully."
+    });
+  };
+  
+  const handleSaveRegionalSettings = () => {
+    toast({
+      title: "Regional settings saved",
+      description: "Your regional settings have been updated successfully."
+    });
+  };
+  
+  const handleSaveNotifications = () => {
+    toast({
+      title: "Notification preferences saved",
+      description: "Your notification preferences have been updated successfully."
+    });
+  };
+  
+  const handleUpdatePassword = () => {
+    toast({
+      title: "Password updated",
+      description: "Your password has been updated successfully."
+    });
+  };
+  
+  const handleSignOutDevices = () => {
+    toast({
+      title: "Devices signed out",
+      description: "You've been signed out from all other devices."
+    });
+  };
+  
+  const handleSaveAppearance = () => {
+    toast({
+      title: "Appearance settings saved",
+      description: "Your appearance settings have been updated successfully."
+    });
+  };
+
   return (
     <div className="flex-1 overflow-y-auto">
       <DashboardHeader />
@@ -35,24 +111,40 @@ const Settings = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="storeName">Store Name</Label>
-                    <Input id="storeName" defaultValue="Auto Excellence" />
+                    <Label htmlFor="name">Store Name</Label>
+                    <Input 
+                      id="name" 
+                      value={storeInfo.name}
+                      onChange={handleStoreInfoChange}
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="storeEmail">Contact Email</Label>
-                    <Input id="storeEmail" defaultValue="contact@autoexcellence.com" />
+                    <Label htmlFor="email">Contact Email</Label>
+                    <Input 
+                      id="email" 
+                      value={storeInfo.email}
+                      onChange={handleStoreInfoChange}
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="storePhone">Contact Phone</Label>
-                    <Input id="storePhone" defaultValue="(555) 123-4567" />
+                    <Label htmlFor="phone">Contact Phone</Label>
+                    <Input 
+                      id="phone" 
+                      value={storeInfo.phone}
+                      onChange={handleStoreInfoChange}
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="storeAddress">Store Address</Label>
-                    <Input id="storeAddress" defaultValue="123 Auto Boulevard, Car City, CC 12345" />
+                    <Label htmlFor="address">Store Address</Label>
+                    <Input 
+                      id="address" 
+                      value={storeInfo.address}
+                      onChange={handleStoreInfoChange}
+                    />
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                  <Button>Save Changes</Button>
+                  <Button onClick={handleSaveStoreInfo}>Save Changes</Button>
                 </CardFooter>
               </Card>
               
@@ -68,8 +160,9 @@ const Settings = () => {
                     <Label htmlFor="timezone">Timezone</Label>
                     <select 
                       id="timezone" 
-                      className="w-full p-2 border border-input rounded-md bg-transparent"
-                      defaultValue="America/New_York"
+                      className="w-full p-2 border border-input rounded-md bg-background"
+                      value={regionalSettings.timezone}
+                      onChange={handleRegionalSettingChange}
                     >
                       <option value="America/New_York">Eastern Time (US & Canada)</option>
                       <option value="America/Chicago">Central Time (US & Canada)</option>
@@ -82,8 +175,9 @@ const Settings = () => {
                     <Label htmlFor="currency">Currency</Label>
                     <select 
                       id="currency" 
-                      className="w-full p-2 border border-input rounded-md bg-transparent"
-                      defaultValue="USD"
+                      className="w-full p-2 border border-input rounded-md bg-background"
+                      value={regionalSettings.currency}
+                      onChange={handleRegionalSettingChange}
                     >
                       <option value="USD">USD - US Dollar</option>
                       <option value="EUR">EUR - Euro</option>
@@ -96,8 +190,9 @@ const Settings = () => {
                     <Label htmlFor="dateFormat">Date Format</Label>
                     <select 
                       id="dateFormat" 
-                      className="w-full p-2 border border-input rounded-md bg-transparent"
-                      defaultValue="MM/DD/YYYY"
+                      className="w-full p-2 border border-input rounded-md bg-background"
+                      value={regionalSettings.dateFormat}
+                      onChange={handleRegionalSettingChange}
                     >
                       <option value="MM/DD/YYYY">MM/DD/YYYY</option>
                       <option value="DD/MM/YYYY">DD/MM/YYYY</option>
@@ -106,7 +201,7 @@ const Settings = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                  <Button>Save Changes</Button>
+                  <Button onClick={handleSaveRegionalSettings}>Save Changes</Button>
                 </CardFooter>
               </Card>
             </div>
@@ -182,7 +277,7 @@ const Settings = () => {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-end">
-                <Button>Save Preferences</Button>
+                <Button onClick={handleSaveNotifications}>Save Preferences</Button>
               </CardFooter>
             </Card>
           </TabsContent>
@@ -212,7 +307,7 @@ const Settings = () => {
                       <Input id="confirmPassword" type="password" />
                     </div>
                   </div>
-                  <Button>Update Password</Button>
+                  <Button onClick={handleUpdatePassword}>Update Password</Button>
                 </div>
                 
                 <Separator />
@@ -247,7 +342,7 @@ const Settings = () => {
                         </div>
                       </div>
                       
-                      <Button variant="outline">Sign Out of All Other Devices</Button>
+                      <Button variant="outline" onClick={handleSignOutDevices}>Sign Out of All Other Devices</Button>
                     </div>
                   </div>
                 </div>
@@ -274,9 +369,10 @@ const Settings = () => {
                         name="theme" 
                         value="dark" 
                         className="h-4 w-4 border-gray-300 text-primary focus:ring-primary" 
-                        defaultChecked 
+                        checked={theme === "dark"}
+                        onChange={() => theme !== "dark" && toggleTheme()}
                       />
-                      <Label htmlFor="theme-dark">Dark Mode (Default)</Label>
+                      <Label htmlFor="theme-dark">Dark Mode</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <input 
@@ -284,19 +380,11 @@ const Settings = () => {
                         id="theme-light" 
                         name="theme" 
                         value="light" 
-                        className="h-4 w-4 border-gray-300 text-primary focus:ring-primary" 
+                        className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+                        checked={theme === "light"}
+                        onChange={() => theme !== "light" && toggleTheme()}
                       />
                       <Label htmlFor="theme-light">Light Mode</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <input 
-                        type="radio" 
-                        id="theme-system" 
-                        name="theme" 
-                        value="system" 
-                        className="h-4 w-4 border-gray-300 text-primary focus:ring-primary" 
-                      />
-                      <Label htmlFor="theme-system">System Default</Label>
                     </div>
                   </div>
                 </div>
@@ -351,7 +439,7 @@ const Settings = () => {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-end">
-                <Button>Save Appearance Settings</Button>
+                <Button onClick={handleSaveAppearance}>Save Appearance Settings</Button>
               </CardFooter>
             </Card>
           </TabsContent>
