@@ -15,74 +15,29 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Eye, FileDown } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-
-// Mock data for orders
-const orderData = [
-  { 
-    id: '#ORD-8924',
-    customer: 'John Doe',
-    vehicle: 'Tesla Model S',
-    date: '2025-04-18',
-    total: 79999,
-    status: 'Delivered'
-  },
-  { 
-    id: '#ORD-8923',
-    customer: 'Jane Smith',
-    vehicle: 'BMW i8',
-    date: '2025-04-17',
-    total: 147500,
-    status: 'Processing'
-  },
-  { 
-    id: '#ORD-8922',
-    customer: 'Robert Johnson',
-    vehicle: 'Mercedes EQS',
-    date: '2025-04-16',
-    total: 102310,
-    status: 'Delivered'
-  },
-  { 
-    id: '#ORD-8921',
-    customer: 'Emily Davis',
-    vehicle: 'Audi e-tron GT',
-    date: '2025-04-15',
-    total: 104900,
-    status: 'Pending'
-  },
-  { 
-    id: '#ORD-8920',
-    customer: 'Michael Brown',
-    vehicle: 'Porsche Taycan',
-    date: '2025-04-14',
-    total: 86700,
-    status: 'Cancelled'
-  },
-  { 
-    id: '#ORD-8919',
-    customer: 'Sarah Wilson',
-    vehicle: 'Toyota Camry',
-    date: '2025-04-13',
-    total: 25945,
-    status: 'Delivered'
-  },
-  { 
-    id: '#ORD-8918',
-    customer: 'David Martinez',
-    vehicle: 'Ford Mustang',
-    date: '2025-04-12',
-    total: 27470,
-    status: 'Processing'
-  },
-];
+import { useDatabase } from '../hooks/useDatabase';
 
 const Orders = () => {
+  const { isInitialized, orders } = useDatabase();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  const filteredOrders = orderData.filter(order => 
+  if (!isInitialized) {
+    return (
+      <div className="flex-1 overflow-y-auto">
+        <DashboardHeader />
+        <div className="p-6">
+          <div className="flex justify-center items-center h-64">
+            <p>Loading orders...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const filteredOrders = orders.filter(order => 
     (order.customer.toLowerCase().includes(searchQuery.toLowerCase()) || 
-     order.id.toLowerCase().includes(searchQuery.toLowerCase())) &&
+     order.orderId.toLowerCase().includes(searchQuery.toLowerCase())) &&
     (statusFilter === 'all' || order.status === statusFilter)
   );
 
@@ -186,7 +141,7 @@ const Orders = () => {
             <TableBody>
               {filteredOrders.map((order) => (
                 <TableRow key={order.id}>
-                  <TableCell className="font-medium">{order.id}</TableCell>
+                  <TableCell className="font-medium">{order.orderId}</TableCell>
                   <TableCell>{order.customer}</TableCell>
                   <TableCell>{order.vehicle}</TableCell>
                   <TableCell>{formatDate(order.date)}</TableCell>
@@ -197,7 +152,7 @@ const Orders = () => {
                       variant="ghost" 
                       size="sm" 
                       className="h-8 w-8 p-0"
-                      onClick={() => handleViewOrder(order.id)}
+                      onClick={() => handleViewOrder(order.orderId)}
                     >
                       <Eye size={16} />
                     </Button>
