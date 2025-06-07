@@ -10,30 +10,82 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Edit, Trash2, Plus } from 'lucide-react';
+import { Check, X, Edit, Trash2, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
-import { useDatabase } from '../hooks/useDatabase';
+
+// Mock data for inventory
+const inventoryData = [
+  { 
+    id: 1, 
+    name: 'Tesla Model S', 
+    stock: 12, 
+    price: 79999, 
+    category: 'Electric', 
+    status: 'In Stock',
+    image: 'https://placehold.co/100x60?text=Model+S'
+  },
+  { 
+    id: 2, 
+    name: 'BMW i8', 
+    stock: 5, 
+    price: 147500, 
+    category: 'Hybrid', 
+    status: 'In Stock',
+    image: 'https://placehold.co/100x60?text=i8'
+  },
+  { 
+    id: 3, 
+    name: 'Mercedes EQS', 
+    stock: 8, 
+    price: 102310, 
+    category: 'Electric', 
+    status: 'In Stock',
+    image: 'https://placehold.co/100x60?text=EQS'
+  },
+  { 
+    id: 4, 
+    name: 'Audi e-tron GT', 
+    stock: 0, 
+    price: 104900, 
+    category: 'Electric', 
+    status: 'Out of Stock',
+    image: 'https://placehold.co/100x60?text=e-tron'
+  },
+  { 
+    id: 5, 
+    name: 'Porsche Taycan', 
+    stock: 3, 
+    price: 86700, 
+    category: 'Electric', 
+    status: 'Low Stock',
+    image: 'https://placehold.co/100x60?text=Taycan'
+  },
+  { 
+    id: 6, 
+    name: 'Toyota Camry', 
+    stock: 20, 
+    price: 25945, 
+    category: 'Sedan', 
+    status: 'In Stock',
+    image: 'https://placehold.co/100x60?text=Camry'
+  },
+  { 
+    id: 7, 
+    name: 'Ford Mustang', 
+    stock: 7, 
+    price: 27470, 
+    category: 'Sports', 
+    status: 'In Stock',
+    image: 'https://placehold.co/100x60?text=Mustang'
+  },
+];
 
 const Inventory = () => {
-  const { isInitialized, vehicles, deleteVehicle } = useDatabase();
   const [searchQuery, setSearchQuery] = useState('');
   
-  if (!isInitialized) {
-    return (
-      <div className="flex-1 overflow-y-auto">
-        <DashboardHeader />
-        <div className="p-6">
-          <div className="flex justify-center items-center h-64">
-            <p>Loading inventory...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  
-  const filteredInventory = vehicles.filter(item => 
+  const filteredInventory = inventoryData.filter(item => 
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -71,20 +123,11 @@ const Inventory = () => {
     });
   };
   
-  const handleDelete = async (id: number) => {
-    try {
-      await deleteVehicle(id);
-      toast({
-        title: "Vehicle Deleted",
-        description: "Vehicle has been successfully deleted.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete vehicle.",
-        variant: "destructive",
-      });
-    }
+  const handleDelete = (id: number) => {
+    toast({
+      title: "Delete Vehicle",
+      description: `Vehicle #${id} would be deleted after confirmation.`,
+    });
   };
 
   return (
@@ -140,10 +183,10 @@ const Inventory = () => {
                   <TableCell>{getStatusBadge(item.status)}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(item.id!)}>
+                      <Button variant="ghost" size="sm" onClick={() => handleEdit(item.id)}>
                         <Edit size={16} />
                       </Button>
-                      <Button variant="ghost" size="sm" className="text-red-500" onClick={() => handleDelete(item.id!)}>
+                      <Button variant="ghost" size="sm" className="text-red-500" onClick={() => handleDelete(item.id)}>
                         <Trash2 size={16} />
                       </Button>
                     </div>

@@ -13,28 +13,87 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Eye, Plus, Mail, Phone, Trash2, Edit } from 'lucide-react';
+import { Eye, Plus, Mail, Phone } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import { useDatabase } from '../hooks/useDatabase';
+
+// Mock data for customers
+const customerData = [
+  {
+    id: 1,
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    phone: '(555) 123-4567',
+    orders: 3,
+    spent: 108450,
+    status: 'Active',
+    lastPurchase: '2025-04-10'
+  },
+  {
+    id: 2,
+    name: 'Jane Smith',
+    email: 'jane.smith@example.com',
+    phone: '(555) 987-6543',
+    orders: 1,
+    spent: 147500,
+    status: 'Active',
+    lastPurchase: '2025-04-17'
+  },
+  {
+    id: 3,
+    name: 'Robert Johnson',
+    email: 'robert.j@example.com',
+    phone: '(555) 555-5555',
+    orders: 2,
+    spent: 128255,
+    status: 'Active',
+    lastPurchase: '2025-04-02'
+  },
+  {
+    id: 4,
+    name: 'Emily Davis',
+    email: 'emily.d@example.com',
+    phone: '(555) 222-3333',
+    orders: 1,
+    spent: 104900,
+    status: 'Inactive',
+    lastPurchase: '2025-03-15'
+  },
+  {
+    id: 5,
+    name: 'Michael Brown',
+    email: 'michael.b@example.com',
+    phone: '(555) 444-5555',
+    orders: 0,
+    spent: 0,
+    status: 'Inactive',
+    lastPurchase: null
+  },
+  {
+    id: 6,
+    name: 'Sarah Wilson',
+    email: 'sarah.w@example.com',
+    phone: '(555) 777-8888',
+    orders: 1,
+    spent: 25945,
+    status: 'Active',
+    lastPurchase: '2025-04-13'
+  },
+  {
+    id: 7,
+    name: 'David Martinez',
+    email: 'david.m@example.com',
+    phone: '(555) 666-7777',
+    orders: 2,
+    spent: 54940,
+    status: 'Active',
+    lastPurchase: '2025-03-25'
+  }
+];
 
 const Customers = () => {
-  const { isInitialized, customers, deleteCustomer } = useDatabase();
   const [searchQuery, setSearchQuery] = useState('');
 
-  if (!isInitialized) {
-    return (
-      <div className="flex-1 overflow-y-auto">
-        <DashboardHeader />
-        <div className="p-6">
-          <div className="flex justify-center items-center h-64">
-            <p>Loading customers...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const filteredCustomers = customers.filter(customer => 
+  const filteredCustomers = customerData.filter(customer => 
     customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     customer.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -86,29 +145,6 @@ const Customers = () => {
       title: "View Customer Details",
       description: `Viewing details for customer #${id}`,
     });
-  };
-
-  const handleEditCustomer = (id: number) => {
-    toast({
-      title: "Edit Customer",
-      description: `Editing customer #${id}`,
-    });
-  };
-
-  const handleDeleteCustomer = async (id: number) => {
-    try {
-      await deleteCustomer(id);
-      toast({
-        title: "Customer Deleted",
-        description: "Customer has been successfully deleted.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete customer.",
-        variant: "destructive",
-      });
-    }
   };
 
   return (
@@ -176,32 +212,14 @@ const Customers = () => {
                   <TableCell>{formatDate(customer.lastPurchase)}</TableCell>
                   <TableCell>{getStatusBadge(customer.status)}</TableCell>
                   <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 w-8 p-0"
-                        onClick={() => handleViewCustomer(customer.id!)}
-                      >
-                        <Eye size={16} />
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 w-8 p-0"
-                        onClick={() => handleEditCustomer(customer.id!)}
-                      >
-                        <Edit size={16} />
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 w-8 p-0 text-red-500"
-                        onClick={() => handleDeleteCustomer(customer.id!)}
-                      >
-                        <Trash2 size={16} />
-                      </Button>
-                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-8 w-8 p-0"
+                      onClick={() => handleViewCustomer(customer.id)}
+                    >
+                      <Eye size={16} />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
